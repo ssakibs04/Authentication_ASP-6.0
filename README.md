@@ -143,3 +143,24 @@ public IActionResult Logout()
     }
     return View();
 }
+```
+# Signup
+```csharp
+  public IActionResult Register()
+  {
+
+      return View();
+  }
+  [HttpPost]
+  public async Task <IActionResult> Register(Student std)
+  {
+      if (ModelState.IsValid) { 
+      await context.Students.AddAsync(std);
+          await context.SaveChangesAsync();
+          TempData["Success"] = "Registerd Successfully";
+          return RedirectToAction("Login");
+       
+      }
+      return View();
+  }
+
