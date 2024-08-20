@@ -4,7 +4,7 @@ This guide demonstrates how to implement basic authentication and session manage
 
 ## Dashboard Action
 
-```csharp
+
 ```csharp
 // Dashboard Action
 public IActionResult Dashboard()
