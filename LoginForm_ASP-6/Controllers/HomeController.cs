@@ -36,6 +36,11 @@ namespace LoginForm_ASP_6.Controllers
         //login
         public IActionResult Login()
         {
+            if (HttpContext.Session.GetString("userseason") != null)
+            {
+
+                return RedirectToAction("Dashboard");
+            }
             return View();
         }
         [HttpPost]
@@ -55,8 +60,15 @@ namespace LoginForm_ASP_6.Controllers
             }
             return View(myUser);
         }
-        public IActionResult Privacy()
+        public IActionResult Logout()
         {
+
+            if (HttpContext.Session.GetString("userseason") != null)
+            {
+
+                HttpContext.Session.Remove("userseason");
+                return RedirectToAction("Login");
+            }
             return View();
         }
 
