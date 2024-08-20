@@ -93,6 +93,11 @@ public IActionResult Dashboard()
 // GET: Login Action
 public IActionResult Login()
 {
+    if (HttpContext.Session.GetString("userseason") != null)
+    {
+
+        return RedirectToAction("Dashboard");
+    }
     return View();
 }
 ```
@@ -124,3 +129,17 @@ public IActionResult Login(Student user)
 }
 
 
+```
+# Logout
+```csharp
+public IActionResult Logout()
+{
+
+    if (HttpContext.Session.GetString("userseason") != null)
+    {
+
+        HttpContext.Session.Remove("userseason");
+        return RedirectToAction("Login");
+    }
+    return View();
+}
