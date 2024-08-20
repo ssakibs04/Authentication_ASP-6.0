@@ -17,6 +17,10 @@
             {
                 <p style="color:red">@ViewBag.message</p>
             }
+            if (TempData["Success"] != null)
+            {
+                <p style="color:green">@TempData["Success"]</p>
+            }
         }
          <form asp-action="Login">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -35,6 +39,10 @@
                 <input type="submit" value="Login" class="btn btn-primary" />
             </div>
         </form>
+        <br />
+        <p>
+            <a asp-controller="Home" asp-action="Register">Not Registerd yet? click here to Register</a>
+        </p>
     </div>
 </div>
 

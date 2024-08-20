@@ -60,6 +60,7 @@ namespace LoginForm_ASP_6.Controllers
             }
             return View(myUser);
         }
+        //logout
         public IActionResult Logout()
         {
 
@@ -71,6 +72,32 @@ namespace LoginForm_ASP_6.Controllers
             }
             return View();
         }
+
+
+        //Register
+        public IActionResult Register()
+        {
+
+            return View();
+        }
+        [HttpPost]
+        public async Task <IActionResult> Register(Student std)
+        {
+            if (ModelState.IsValid) { 
+            await context.Students.AddAsync(std);
+                await context.SaveChangesAsync();
+                TempData["Success"] = "Registerd Successfully";
+                return RedirectToAction("Login");
+             
+            }
+            return View();
+        }
+
+
+
+
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
