@@ -1,5 +1,6 @@
 ﻿using LoginForm_ASP_6.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
 
 namespace LoginForm_ASP_6.Controllers
@@ -77,6 +78,13 @@ namespace LoginForm_ASP_6.Controllers
         //Register
         public IActionResult Register()
         {
+            List<SelectListItem> Gender = new()
+            {
+                new SelectListItem {Value="Male",Text="Male"},
+                new SelectListItem{Value="Female",Text="Female"},
+               new SelectListItem{Value="Others",Text="Others"}
+            };
+            ViewBag.Gender = Gender;    
 
             return View();
         }
