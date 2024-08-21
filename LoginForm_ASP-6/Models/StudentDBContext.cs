@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace LoginForm_ASP_6.Models
 {
-    public partial class loginDBContext : DbContext
+    public partial class StudentDBContext : DbContext
     {
-        public loginDBContext()
+        public StudentDBContext()
         {
         }
 
-        public loginDBContext(DbContextOptions<loginDBContext> options)
+        public StudentDBContext(DbContextOptions<StudentDBContext> options)
             : base(options)
         {
         }

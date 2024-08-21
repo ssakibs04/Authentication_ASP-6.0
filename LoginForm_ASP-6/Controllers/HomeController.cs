@@ -1,6 +1,8 @@
 ﻿using LoginForm_ASP_6.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Diagnostics;
 
 namespace LoginForm_ASP_6.Controllers
@@ -8,9 +10,9 @@ namespace LoginForm_ASP_6.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly loginDBContext context;
+        private readonly StudentDBContext context;
 
-        public HomeController(loginDBContext context)
+        public HomeController(StudentDBContext context)
         {
             this.context = context;
         }
@@ -19,21 +21,44 @@ namespace LoginForm_ASP_6.Controllers
         {
             return View();
         }
-        //Dashbaord
+
+
+        //Admin Dashbaord
+        public async Task<IActionResult> AdminDashboard()
+{
+    
+    string? userEmail = HttpContext.Session.GetString("userseason");// Get the user's email from the session
+
+   
+    if (userEmail != null && userEmail == "admin@gmail.com") 
+    {
+        // Retrieve data for the admin
+        var students = await context.Students.ToListAsync();
+        return View(students);
+    }
+    else
+    {
+       
+        return RedirectToAction("Login");
+    }
+}
+
+
         public IActionResult Dashboard()
         {
-            if(HttpContext.Session.GetString("userseason")!=null)
+            if (HttpContext.Session.GetString("userseason") != null)
             {
-
                 ViewBag.Myseason = HttpContext.Session.GetString("userseason");
-
             }
             else
             {
                 return RedirectToAction("Login");
             }
             return View();
+
         }
+
+
         //login
         public IActionResult Login()
         {
@@ -44,23 +69,43 @@ namespace LoginForm_ASP_6.Controllers
             }
             return View();
         }
+
+      //login post
+
+
+
         [HttpPost]
-        //login post
+
+      
         public IActionResult Login(Student user)
         {
-            var myUser= context.Students.Where(x=>x.Email== user.Email && x.Password==user.Password).FirstOrDefault();
+            // Check if the user's email and password match a record in the database
+            var myUser = context.Students.FirstOrDefault(x => x.Email == user.Email && x.Password == user.Password);
 
-            if (myUser != null) { 
-                HttpContext.Session.SetString("userseason",myUser.Email);
-                return RedirectToAction("Dashboard");
+            if (myUser != null)
+            {
+                // Store the user's email in the session
+                HttpContext.Session.SetString("userseason", myUser.Email);
 
+           
+                if (myUser.Email == "admin@gmail.com")
+                {
+                    return RedirectToAction("AdminDashboard", "Home");
+                }
+                else
+                {
+                    return RedirectToAction("Dashboard", "Home");
+                }
             }
             else
             {
+                // If login fails, show an error message
                 ViewBag.message = "Login Failed";
+                return View(user);
             }
-            return View(myUser);
         }
+
+        //logout
         //logout
         public IActionResult Logout()
         {
@@ -69,10 +114,11 @@ namespace LoginForm_ASP_6.Controllers
             {
 
                 HttpContext.Session.Remove("userseason");
-                return RedirectToAction("Login");
+                return RedirectToAction("Login","Home");
             }
             return View();
         }
+
 
 
         //Register
